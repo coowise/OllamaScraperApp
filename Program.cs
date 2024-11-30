@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System.Diagnostics;
 
 class Program
 {
@@ -10,7 +11,9 @@ class Program
 
         var content = ExtractContent(response);
 
-        Console.WriteLine(content);
+        var summary = AnalyzeContentWithOllama(content);
+
+        Console.WriteLine(summary);
     }
 
     static string ExtractContent(string html)
@@ -21,5 +24,26 @@ class Program
         // Extract content, e.g., all paragraphs
         var paragraphs = doc.DocumentNode.SelectNodes("//p");
         return string.Join("\n", paragraphs.Select(p => p.InnerText));
+    }
+
+    static string AnalyzeContentWithOllama(string content)
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "ollama",
+                Arguments = $"run llama3 'Summarize this: {content}'",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+
+        process.Start();
+        string result = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        return result;
     }
 }
