@@ -36,3 +36,7 @@ This will fetch the content from the specified URL, extract the relevant informa
 
 - HtmlAgilityPack (for parsing HTML content)
 - Ollama (external dependency)
+
+## Contributing
+
+Contributions are welcome! Feel free to fork the repository and submit a pull request.
